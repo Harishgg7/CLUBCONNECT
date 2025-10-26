@@ -1,17 +1,39 @@
 import 'package:flutter/material.dart';
+import 'club_chat_screen.dart';
 
-// This is the Student's "My Club" screen
 class MyClubScreen extends StatelessWidget {
-  const MyClubScreen({super.key});
+  final String studentId;
+
+  const MyClubScreen({Key? key, required this.studentId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        'Placeholder for "My Club" (Student View)',
-        style: TextStyle(fontSize: 18),
-        textAlign: TextAlign.center,
-      ),
-    );
+    // Check if user is in a club
+    final bool isInClub = true; // Replace with actual check
+
+    if (!isInClub) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.inbox, size: 100, color: Colors.grey.shade400),
+            const SizedBox(height: 16),
+            Text(
+              'You haven\'t joined any club yet',
+              style: TextStyle(fontSize: 18, color: Colors.grey.shade600),
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: () {
+                // Navigate to clubs list
+              },
+              child: const Text('Explore Clubs'),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return ClubChatScreen(clubName: 'Tech Club', studentId: studentId);
   }
 }

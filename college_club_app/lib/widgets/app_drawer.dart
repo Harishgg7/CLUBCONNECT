@@ -1,63 +1,120 @@
 import 'package:flutter/material.dart';
 
-// This is our REUSABLE drawer widget
 class AppDrawer extends StatelessWidget {
-  // This function will be called when an item is tapped
-  final Function(String) onSelectItem;
-  // This is the list of items to display
-  final List<Map<String, dynamic>> menuItems;
+  final String userId;
+  final int selectedIndex;
+  final Function(int) onItemSelected;
+  final List<DrawerMenuItem> menuItems;
+  final bool isClubAdmin;
 
   const AppDrawer({
-    super.key,
-    required this.onSelectItem,
+    Key? key,
+    required this.userId,
+    required this.selectedIndex,
+    required this.onItemSelected,
     required this.menuItems,
-  });
+    this.isClubAdmin = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
+    return Container(
+      color: Colors.grey.shade100,
       child: ListView(
-        // Important: Remove any padding from the ListView.
         padding: EdgeInsets.zero,
         children: [
-          // This is the header of the drawer
-          const DrawerHeader(
+          DrawerHeader(
             decoration: BoxDecoration(
-              color: Colors.blue,
-            ),
-            child: Text(
-              'Club Connect',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
+              gradient: LinearGradient(
+                colors: isClubAdmin
+                    ? [Colors.orange.shade400, Colors.red.shade400]
+                    : [Colors.blue.shade400, Colors.purple.shade400],
               ),
             ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                CircleAvatar(
+                  radius: 30,
+                  backgroundColor: Colors.white24,
+                  child: Icon(
+                    isClubAdmin ? Icons.groups : Icons.person,
+                    size: 40,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  userId,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
           ),
-          // Here we build the list of items
-          ...menuItems.map((item) {
-            return ListTile(
-              leading: Icon(item['icon']),
-              title: Text(item['title']),
-              onTap: () {
-                // When tapped, call the function that was passed in
-                onSelectItem(item['title']);
-              },
+          ...menuItems.asMap().entries.map((entry) {
+            return _buildMenuItem(
+              icon: entry.value.icon,
+              title: entry.value.title,
+              index: entry.key,
             );
-          }).toList(),
-
-          // A divider and a logout button
+          }),
           const Divider(),
+          ListTile(
+            leading: const Icon(Icons.settings),
+            title: const Text('Settings'),
+            onTap: () {
+              // Handle settings
+            },
+          ),
           ListTile(
             leading: const Icon(Icons.logout),
             title: const Text('Logout'),
             onTap: () {
-              // TODO: Add logout logic
-              // For now, just pop back to the switcher
-              Navigator.of(context).popUntil((route) => route.isFirst);
+              Navigator.pushReplacementNamed(context, '/');
             },
           ),
         ],
       ),
     );
   }
+
+  Widget _buildMenuItem({
+    required IconData icon,
+    required String title,
+    required int index,
+  }) {
+    final isSelected = selectedIndex == index;
+    final Color selectedColor = isClubAdmin ? Colors.orange : Colors.blue;
+
+    return ListTile(
+      leading: Icon(
+        icon,
+        color: isSelected ? selectedColor : Colors.grey.shade700,
+      ),
+      title: Text(
+        title,
+        style: TextStyle(
+          color: isSelected ? selectedColor : Colors.grey.shade700,
+          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+        ),
+      ),
+      selected: isSelected,
+      selectedTileColor: isClubAdmin
+          ? Colors.orange.shade50
+          : Colors.blue.shade50,
+      onTap: () => onItemSelected(index),
+    );
+  }
+}
+
+class DrawerMenuItem {
+  final IconData icon;
+  final String title;
+
+  DrawerMenuItem({required this.icon, required this.title});
 }
