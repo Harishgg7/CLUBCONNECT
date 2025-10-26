@@ -6,7 +6,6 @@ class ClubListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Sample club data
     final clubs = [
       {'name': 'Tech Club', 'members': 150, 'category': 'Technology'},
       {'name': 'Music Club', 'members': 80, 'category': 'Arts'},
@@ -16,33 +15,39 @@ class ClubListScreen extends StatelessWidget {
     ];
 
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Explore Clubs',
-              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Find and join clubs that match your interests',
-              style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              decoration: InputDecoration(
-                hintText: 'Search clubs...',
-                prefixIcon: const Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+      body: SingleChildScrollView(
+        // Add scrolling
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Explore Clubs',
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Find and join clubs that match your interests',
+                style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                decoration: InputDecoration(
+                  hintText: 'Search clubs...',
+                  prefixIcon: const Icon(Icons.search),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 16),
-            Expanded(
-              child: GridView.builder(
+              const SizedBox(height: 16),
+              // Use Wrap or Column with proper spacing
+              GridView.builder(
+                shrinkWrap:
+                    true, // Important: makes GridView work in SingleChildScrollView
+                physics:
+                    const NeverScrollableScrollPhysics(), // Disable GridView scroll
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   crossAxisSpacing: 16,
@@ -55,8 +60,8 @@ class ClubListScreen extends StatelessWidget {
                   return _buildClubCard(context, club);
                 },
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

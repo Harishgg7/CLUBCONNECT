@@ -12,11 +12,11 @@ class ClubConnectApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'ClubConnect',
+      debugShowCheckedModeBanner: false, // Add this line to remove debug banner
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      debugShowCheckedModeBanner: false,
       home: const LoginScreen(),
     );
   }

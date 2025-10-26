@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/event_card.dart';
 
 class EventsFeedScreen extends StatelessWidget {
   const EventsFeedScreen({Key? key}) : super(key: key);
@@ -29,113 +30,40 @@ class EventsFeedScreen extends StatelessWidget {
       },
     ];
 
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Upcoming Events',
-            style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Stay updated with all club activities',
-            style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
-          ),
-          const SizedBox(height: 16),
-          Expanded(
-            child: ListView.builder(
-              itemCount: events.length,
-              itemBuilder: (context, index) {
-                final event = events[index];
-                return _buildEventCard(event);
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildEventCard(Map<String, dynamic> event) {
-    return Card(
-      margin: const EdgeInsets.only(bottom: 16),
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+    return SingleChildScrollView(
+      // Add scrolling to prevent overflow
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.blue.shade100,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Icon(Icons.event, color: Colors.blue, size: 30),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        event['title'],
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'by ${event['club']}',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey.shade600,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Icon(
-                  Icons.calendar_today,
-                  size: 16,
-                  color: Colors.grey.shade600,
-                ),
-                const SizedBox(width: 8),
-                Text(event['date']),
-                const SizedBox(width: 24),
-                Icon(Icons.access_time, size: 16, color: Colors.grey.shade600),
-                const SizedBox(width: 8),
-                Text(event['time']),
-              ],
+            const Text(
+              'Upcoming Events',
+              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
-            Row(
-              children: [
-                Icon(Icons.location_on, size: 16, color: Colors.grey.shade600),
-                const SizedBox(width: 8),
-                Text(event['location']),
-              ],
+            Text(
+              'Stay updated with all club activities',
+              style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
             ),
             const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                TextButton(onPressed: () {}, child: const Text('Learn More')),
-                const SizedBox(width: 8),
-                ElevatedButton(onPressed: () {}, child: const Text('Register')),
-              ],
-            ),
+            // Use Column instead of Expanded ListView
+            ...events
+                .map(
+                  (event) => Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: EventCard(
+                      title: event['title']!,
+                      clubName: event['club']!,
+                      date: event['date']!,
+                      time: event['time']!,
+                      location: event['location']!,
+                      onLearnMore: () {},
+                      onRegister: () {},
+                    ),
+                  ),
+                )
+                .toList(),
           ],
         ),
       ),

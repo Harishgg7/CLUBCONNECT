@@ -8,28 +8,28 @@ class MyClubScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Check if user is in a club
-    final bool isInClub = true; // Replace with actual check
+    final bool isInClub = true;
 
     if (!isInClub) {
       return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.inbox, size: 100, color: Colors.grey.shade400),
-            const SizedBox(height: 16),
-            Text(
-              'You haven\'t joined any club yet',
-              style: TextStyle(fontSize: 18, color: Colors.grey.shade600),
-            ),
-            const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: () {
-                // Navigate to clubs list
-              },
-              child: const Text('Explore Clubs'),
-            ),
-          ],
+        child: SingleChildScrollView(
+          // Add scroll view
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.inbox, size: 100, color: Colors.grey.shade400),
+              const SizedBox(height: 16),
+              Text(
+                'You haven\'t joined any club yet',
+                style: TextStyle(fontSize: 18, color: Colors.grey.shade600),
+              ),
+              const SizedBox(height: 24),
+              ElevatedButton(
+                onPressed: () {},
+                child: const Text('Explore Clubs'),
+              ),
+            ],
+          ),
         ),
       );
     }
